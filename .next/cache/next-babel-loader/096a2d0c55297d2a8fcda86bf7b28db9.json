@@ -1,0 +1,1 @@
+{"ast":null,"code":"export var AUTH_TOKEN = \"auth_token\";","map":{"version":3,"sources":["D:\\Projeler\\na_brno_dobry\\constants.ts"],"names":["AUTH_TOKEN"],"mappings":"AAAA,OAAO,IAAMA,UAAU,GAAG,YAAnB","sourcesContent":["export const AUTH_TOKEN = \"auth_token\";\r\n"]},"metadata":{},"sourceType":"module"}
