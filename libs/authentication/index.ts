@@ -1,5 +1,5 @@
 import nextCookie from "next-cookies";
-import getUserFromToken from "./getUserIdFromToken";
+import getUserFromToken from "./getUserFromToken";
 import { NextPageContext } from "next";
 import Router from "next/router";
 
@@ -11,7 +11,7 @@ const authentication = (context: NextPageContext) => {
   const user = getUserFromToken(auth_token);
   // if called on server
   if (context.res && !user) {
-    context.res.writeHead(302, { Location: "/login/graphql" });
+    context.res.writeHead(302, { Location: "/login" });
     context.res.end();
     return;
   }

@@ -125,6 +125,11 @@ var Header = function Header(_ref) {
       client = _ref.client;
   var currentPath = router.route;
 
+  var shouldRenderHeader = function shouldRenderHeader() {
+    var page = currentPath.split("/")[1];
+    return Refs.indexOf("/" + page) !== -1;
+  };
+
   var setActiveLink = function setActiveLink(ref) {
     return ref === currentPath ? "nav-link active" : "nav-link";
   };
@@ -159,16 +164,17 @@ var Header = function Header(_ref) {
     };
   }();
 
-  return react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Navbar"], {
+  return react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_2___default.a.Fragment, null, shouldRenderHeader() && react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Navbar"], {
     bg: "dark",
     variant: "dark"
   }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_4___default.a, {
-    href: "/products"
+    href: "/products",
+    as: "/"
   }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("a", {
     className: "navbar-brand"
   }, "Na Brno Dobry")), currentPath !== "/login/graphql" && react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Nav"], null, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_4___default.a, {
     href: Refs[0],
-    as: "/products"
+    as: "/"
   }, react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("a", {
     className: setActiveLink(Refs[0])
   }, "Products")), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_4___default.a, {
@@ -181,7 +187,7 @@ var Header = function Header(_ref) {
     onClick: function onClick() {
       return logOut(client);
     }
-  }, "Log out")));
+  }, "Log out"))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Header);
@@ -460,10 +466,10 @@ var UserContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext(nul
 
 /***/ }),
 
-/***/ "./libs/authentication/getUserIdFromToken.ts":
-/*!***************************************************!*\
-  !*** ./libs/authentication/getUserIdFromToken.ts ***!
-  \***************************************************/
+/***/ "./libs/authentication/getUserFromToken.ts":
+/*!*************************************************!*\
+  !*** ./libs/authentication/getUserFromToken.ts ***!
+  \*************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -490,6 +496,48 @@ var getUserFromToken = function getUserFromToken(token) {
 
 /***/ }),
 
+/***/ "./libs/authentication/index.ts":
+/*!**************************************!*\
+  !*** ./libs/authentication/index.ts ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var next_cookies__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! next-cookies */ "next-cookies");
+/* harmony import */ var next_cookies__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(next_cookies__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _getUserFromToken__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getUserFromToken */ "./libs/authentication/getUserFromToken.ts");
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next/router */ "next/router");
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+var authentication = function authentication(context) {
+  // reads the token in cookie (checks if res in context exists) according to the res, runs for client or server side.
+  var _nextCookie = next_cookies__WEBPACK_IMPORTED_MODULE_0___default()(context),
+      auth_token = _nextCookie.auth_token; // we check if the cookie is valid here. If token cannot be decoded, then it's invalid.
+
+
+  var user = Object(_getUserFromToken__WEBPACK_IMPORTED_MODULE_1__["default"])(auth_token); // if called on server
+
+  if (context.res && !user) {
+    context.res.writeHead(302, {
+      Location: "/login"
+    });
+    context.res.end();
+    return;
+  } // if called on client
+
+
+  if (!user) next_router__WEBPACK_IMPORTED_MODULE_2___default.a.push("/login/graphql", "/login");
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (authentication);
+
+/***/ }),
+
 /***/ "./libs/authentication/withUserData.jsx":
 /*!**********************************************!*\
   !*** ./libs/authentication/withUserData.jsx ***!
@@ -511,8 +559,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/defineProperty */ "./node_modules/@babel/runtime-corejs2/helpers/esm/defineProperty.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _getUserIdFromToken__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./getUserIdFromToken */ "./libs/authentication/getUserIdFromToken.ts");
+/* harmony import */ var _getUserFromToken__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./getUserFromToken */ "./libs/authentication/getUserFromToken.ts");
 /* harmony import */ var _Apollo_withApolloClient__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Apollo/withApolloClient */ "./libs/Apollo/withApolloClient.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! . */ "./libs/authentication/index.ts");
+
 
 
 
@@ -557,28 +607,30 @@ var withUserData = function withUserData(App) {
             while (1) {
               switch (_context.prev = _context.next) {
                 case 0:
+                  console.log("WITHUSERDATA IS CALLED !");
                   appProps = {};
                   nextContext = nextAppContext.ctx;
 
                   if (!App.getInitialProps) {
-                    _context.next = 6;
+                    _context.next = 7;
                     break;
                   }
 
-                  _context.next = 5;
+                  _context.next = 6;
                   return App.getInitialProps(nextAppContext);
 
-                case 5:
+                case 6:
                   appProps = _context.sent;
 
-                case 6:
+                case 7:
                   _parseCookies = Object(_Apollo_withApolloClient__WEBPACK_IMPORTED_MODULE_11__["parseCookies"])(nextContext.req), auth_token = _parseCookies.auth_token;
-                  user = Object(_getUserIdFromToken__WEBPACK_IMPORTED_MODULE_10__["default"])(auth_token);
+                  user = Object(_getUserFromToken__WEBPACK_IMPORTED_MODULE_10__["default"])(auth_token);
+                  if (nextContext.pathname !== "/login/graphql" && nextContext.pathname !== "/login") Object(___WEBPACK_IMPORTED_MODULE_12__["default"])(nextContext);
                   return _context.abrupt("return", Object(_babel_runtime_corejs2_helpers_esm_objectSpread__WEBPACK_IMPORTED_MODULE_1__["default"])({}, appProps, {
                     user: user
                   }));
 
-                case 9:
+                case 11:
                 case "end":
                   return _context.stop();
               }
@@ -2597,6 +2649,17 @@ module.exports = require("lodash");
 
 /***/ }),
 
+/***/ "next-cookies":
+/*!*******************************!*\
+  !*** external "next-cookies" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("next-cookies");
+
+/***/ }),
+
 /***/ "next-server/dist/lib/request-context":
 /*!*******************************************************!*\
   !*** external "next-server/dist/lib/request-context" ***!
@@ -2660,6 +2723,17 @@ module.exports = require("next-server/dist/lib/utils");
 /***/ (function(module, exports) {
 
 module.exports = require("next/head");
+
+/***/ }),
+
+/***/ "next/router":
+/*!******************************!*\
+  !*** external "next/router" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("next/router");
 
 /***/ }),
 

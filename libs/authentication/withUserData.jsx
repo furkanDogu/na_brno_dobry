@@ -1,12 +1,15 @@
 import React from "react";
-import getUserFromToken from "./getUserIdFromToken";
+import getUserFromToken from "./getUserFromToken";
 import { parseCookies } from "../Apollo/withApolloClient";
+
+import authentication from ".";
 
 const withUserData = App => {
   return class AppWithUserData extends React.Component {
     static displayName = "withUserData(App)";
 
     static async getInitialProps(nextAppContext) {
+      console.log("WITHUSERDATA IS CALLED !");
       let appProps = {};
       const { ctx: nextContext } = nextAppContext;
 
@@ -15,6 +18,12 @@ const withUserData = App => {
       }
       const { auth_token } = parseCookies(nextContext.req);
       const user = getUserFromToken(auth_token);
+
+      if (
+        nextContext.pathname !== "/login/graphql" &&
+        nextContext.pathname !== "/login"
+      )
+        authentication(nextContext);
 
       return {
         ...appProps,

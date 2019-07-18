@@ -12,7 +12,13 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/products": [
+    "/changePassword": [
+      "static/runtime/webpack.js",
+      "static/css/styles.chunk.css",
+      "static/chunks/styles.js",
+      "static/runtime/main.js"
+    ],
+    "/login/graphql": [
       "static/runtime/webpack.js",
       "static/css/styles.chunk.css",
       "static/chunks/styles.js",

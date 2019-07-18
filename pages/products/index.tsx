@@ -1,7 +1,7 @@
 import React from "react";
 import { Query } from "react-apollo";
 import { Table } from "react-bootstrap";
-import { NextComponentType, NextPageContext } from "next";
+import { NextComponentType } from "next";
 import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -11,7 +11,7 @@ import {
   ICategories,
   CATEGORIES_QUERY
 } from "./graphql";
-import authentication from "../../libs/authentication";
+// import authentication from "../../libs/authentication";
 import NewProductSectionGQL from "./NewProductSection/graphql";
 import withModal from "./../../hocs/withModal";
 import UpdateProductGQL from "./UpdateProductSection/graphql";
@@ -87,13 +87,6 @@ const Products: NextComponentType = props => {
       )}
     </Query>
   );
-};
-
-Products.getInitialProps = (context: NextPageContext) => {
-  // check if the user is authenticated before page load.
-  authentication(context);
-
-  return {};
 };
 
 export default withModal({

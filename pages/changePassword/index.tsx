@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../libs/authentication/UserContext";
 import { Container, Row, Col } from "react-bootstrap";
-import { NextComponentType, NextPageContext } from "next";
+import { NextComponentType } from "next";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import NewPasswordSectionGQL from "./NewPasswordSection/graphql";
-import authentication from "../../libs/authentication";
+// import authentication from "../../libs/authentication";
 
 const ChangePassword: NextComponentType = () => {
   const user = useContext(UserContext);
@@ -29,12 +29,6 @@ const ChangePassword: NextComponentType = () => {
     );
   }
   return <h1>User couldn't be loaded</h1>;
-};
-
-ChangePassword.getInitialProps = (context: NextPageContext) => {
-  authentication(context);
-
-  return {};
 };
 
 export default ChangePassword;

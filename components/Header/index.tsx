@@ -16,6 +16,11 @@ const Refs = ["/products", "/changePassword"];
 const Header: React.SFC<IHeaderProps> = ({ router, client }) => {
   const { route: currentPath } = router;
 
+  const shouldRenderHeader = () => {
+    const page = currentPath.split("/")[1];
+    return Refs.indexOf("/" + page) !== -1;
+  };
+
   const setActiveLink = (ref: string) => {
     return ref === currentPath ? "nav-link active" : "nav-link";
   };
@@ -27,24 +32,28 @@ const Header: React.SFC<IHeaderProps> = ({ router, client }) => {
   };
 
   return (
-    <Navbar bg='dark' variant='dark'>
-      <Link href='/products'>
-        <a className='navbar-brand'>Na Brno Dobry</a>
-      </Link>
-      {currentPath !== "/login/graphql" && (
-        <Nav>
-          <Link href={Refs[0]} as='/products'>
-            <a className={setActiveLink(Refs[0])}>Products</a>
+    <>
+      {shouldRenderHeader() && (
+        <Navbar bg='dark' variant='dark'>
+          <Link href='/products' as='/'>
+            <a className='navbar-brand'>Na Brno Dobry</a>
           </Link>
-          <Link href={Refs[1]} as='/changePassword'>
-            <a className={setActiveLink(Refs[1])}>Change password</a>
-          </Link>
-          <span className='nav-link' onClick={() => logOut(client)}>
-            Log out
-          </span>
-        </Nav>
+          {currentPath !== "/login/graphql" && (
+            <Nav>
+              <Link href={Refs[0]} as='/'>
+                <a className={setActiveLink(Refs[0])}>Products</a>
+              </Link>
+              <Link href={Refs[1]} as='/changePassword'>
+                <a className={setActiveLink(Refs[1])}>Change password</a>
+              </Link>
+              <span className='nav-link' onClick={() => logOut(client)}>
+                Log out
+              </span>
+            </Nav>
+          )}
+        </Navbar>
       )}
-    </Navbar>
+    </>
   );
 };
 

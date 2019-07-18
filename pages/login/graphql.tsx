@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import gql from "graphql-tag";
 import { Mutation, MutationFn, ApolloConsumer } from "react-apollo";
-import { useState } from "react";
+import { NextPage, NextPageContext } from "next";
+import nextCookie from "next-cookies";
+import Router from "next/router";
 
 import LoginForm from ".";
+import getUserFromToken from "../../libs/authentication/getUserFromToken";
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $password: String!) {
@@ -39,24 +42,44 @@ const REGISTER_MUTATION = gql`
   }
 `;
 
-const LoginFormGQL: React.FC = () => {
+const LoginFormGQL: NextPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   return (
-    <ApolloConsumer>
-      {client => (
-        <Mutation mutation={isLogin ? LOGIN_MUTATION : REGISTER_MUTATION}>
-          {(login: MutationFn) => (
-            <LoginForm
-              login={login}
-              isLogin={isLogin}
-              onSetLogin={setIsLogin}
-              apolloClient={client}
-            />
-          )}
-        </Mutation>
-      )}
-    </ApolloConsumer>
+    <>
+      <ApolloConsumer>
+        {client => (
+          <Mutation mutation={isLogin ? LOGIN_MUTATION : REGISTER_MUTATION}>
+            {(login: MutationFn) => (
+              <LoginForm
+                login={login}
+                isLogin={isLogin}
+                onSetLogin={setIsLogin}
+                apolloClient={client}
+              />
+            )}
+          </Mutation>
+        )}
+      </ApolloConsumer>
+    </>
   );
+};
+
+LoginFormGQL.getInitialProps = async (context: NextPageContext) => {
+  const { auth_token } = nextCookie(context);
+  const user = getUserFromToken(auth_token);
+
+  console.log(user);
+  if (context.res && user) {
+    console.log("buraya");
+    context.res.writeHead(302, { Location: "/" });
+    context.res.end();
+    return {};
+  }
+
+  if (user) {
+    Router.push("/products", "/");
+  }
+  return {};
 };
 
 export default LoginFormGQL;
