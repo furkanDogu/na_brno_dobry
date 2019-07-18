@@ -9,7 +9,6 @@ const withUserData = App => {
     static displayName = "withUserData(App)";
 
     static async getInitialProps(nextAppContext) {
-      console.log("WITHUSERDATA IS CALLED !");
       let appProps = {};
       const { ctx: nextContext } = nextAppContext;
 

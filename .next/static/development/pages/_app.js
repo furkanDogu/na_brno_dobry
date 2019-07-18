@@ -507,22 +507,21 @@ var withUserData = function withUserData(App) {
             while (1) {
               switch (_context.prev = _context.next) {
                 case 0:
-                  console.log("WITHUSERDATA IS CALLED !");
                   appProps = {};
                   nextContext = nextAppContext.ctx;
 
                   if (!App.getInitialProps) {
-                    _context.next = 7;
+                    _context.next = 6;
                     break;
                   }
 
-                  _context.next = 6;
+                  _context.next = 5;
                   return App.getInitialProps(nextAppContext);
 
-                case 6:
+                case 5:
                   appProps = _context.sent;
 
-                case 7:
+                case 6:
                   _parseCookies = Object(_Apollo_withApolloClient__WEBPACK_IMPORTED_MODULE_11__["parseCookies"])(nextContext.req), auth_token = _parseCookies.auth_token;
                   user = Object(_getUserFromToken__WEBPACK_IMPORTED_MODULE_10__["default"])(auth_token);
                   if (nextContext.pathname !== "/login/graphql" && nextContext.pathname !== "/login") Object(___WEBPACK_IMPORTED_MODULE_12__["default"])(nextContext);
@@ -530,7 +529,7 @@ var withUserData = function withUserData(App) {
                     user: user
                   }));
 
-                case 11:
+                case 10:
                 case "end":
                   return _context.stop();
               }

@@ -704,28 +704,26 @@ function () {
           case 0:
             _nextCookie = next_cookies__WEBPACK_IMPORTED_MODULE_7___default()(context), auth_token = _nextCookie.auth_token;
             user = Object(_libs_authentication_getUserFromToken__WEBPACK_IMPORTED_MODULE_10__["default"])(auth_token);
-            console.log(user);
 
             if (!(context.res && user)) {
-              _context.next = 8;
+              _context.next = 6;
               break;
             }
 
-            console.log("buraya");
             context.res.writeHead(302, {
               Location: "/"
             });
             context.res.end();
             return _context.abrupt("return", {});
 
-          case 8:
+          case 6:
             if (user) {
               next_router__WEBPACK_IMPORTED_MODULE_8___default.a.push("/products", "/");
             }
 
             return _context.abrupt("return", {});
 
-          case 10:
+          case 8:
           case "end":
             return _context.stop();
         }

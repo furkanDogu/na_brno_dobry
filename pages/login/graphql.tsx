@@ -68,9 +68,7 @@ LoginFormGQL.getInitialProps = async (context: NextPageContext) => {
   const { auth_token } = nextCookie(context);
   const user = getUserFromToken(auth_token);
 
-  console.log(user);
   if (context.res && user) {
-    console.log("buraya");
     context.res.writeHead(302, { Location: "/" });
     context.res.end();
     return {};
