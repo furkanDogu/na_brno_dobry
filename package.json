@@ -28,7 +28,7 @@
     "express": "^4.17.1",
     "formik": "^1.5.8",
     "graphql": "^14.4.2",
-    "https-proxy-agent": "^2.2.2",
+    "https-proxy-agent": "^2.2.3",
     "isomorphic-unfetch": "^3.0.0",
     "jwt-simple": "^0.5.6",
     "lodash": "^4.17.14",
